@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김민우 - ERP/회계/세무 시스템 아키텍트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #ccd6f6;
+            background-color: #0a192f;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ccd6f6;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #64ffda;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #64ffda;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: 2rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            color: #ccd6f6;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            color: #64ffda;
+            border-color: #64ffda;
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .lang-btn.active {
+            color: #64ffda;
+            border-color: #64ffda;
+            background: rgba(100, 255, 218, 0.15);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #0a192f;
+            color: #ccd6f6;
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+            font-weight: 700;
+            color: #ccd6f6;
+        }
+
+        .hero .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+            color: #64ffda;
+        }
+
+        .hero .description {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.4s both;
+            color: #8892b0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: transparent;
+            color: #64ffda;
+            padding: 15px 40px;
+            text-decoration: none;
+            border: 2px solid #64ffda;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s both;
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.1);
+        }
+
+        .cta-button:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.2);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ccd6f6;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #64ffda;
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: #112240;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #ccd6f6;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #8892b0;
+            line-height: 1.8;
+        }
+
+        .highlight-box {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #64ffda;
+            margin: 2rem 0;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .highlight-box h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #64ffda;
+            display: block;
+        }
+
+        .stat-label {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Experience Section */
+        .experience {
+            background: #0a192f;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #64ffda;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 2rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 2rem;
+        }
+
+        .timeline-content {
+            background: #112240;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            position: relative;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border: 15px solid transparent;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -30px;
+            border-left-color: #112240;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -30px;
+            border-right-color: #112240;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #64ffda;
+            border-radius: 50%;
+            top: 20px;
+            border: 4px solid #0a192f;
+            box-shadow: 0 0 0 4px #64ffda;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ccd6f6;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-company {
+            color: #64ffda;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-description {
+            color: #8892b0;
+            line-height: 1.6;
+        }
+
+        /* Skills Section */
+        .skills {
+            background: #112240;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: rgba(100, 255, 218, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .skill-category h3 {
+            color: #ccd6f6;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .certification-tag {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        /* Value Proposition Section */
+        .value-proposition {
+            background: #0a192f;
+            color: #ccd6f6;
+        }
+
+        .value-proposition .section-title {
+            color: #ccd6f6;
+        }
+
+        .value-proposition .section-title::after {
+            background: #64ffda;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background: rgba(100, 255, 218, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #ccd6f6;
+        }
+
+        .value-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+            color: #8892b0;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #112240;
+            color: #ccd6f6;
+        }
+
+        .contact .section-title {
+            color: #ccd6f6;
+        }
+
+        .contact .section-title::after {
+            background: #64ffda;
+        }
+
+        .contact-content {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ccd6f6;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(100, 255, 218, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .contact-item i {
+            font-size: 1.2rem;
+            margin-right: 1rem;
+            color: #64ffda;
+            width: 20px;
+        }
+
+        .contact-form {
+            background: #0a192f;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ccd6f6;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: #112240;
+            color: #ccd6f6;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #64ffda;
+        }
+
+        .form-group input.error,
+        .form-group textarea.error {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .form-group input.valid {
+            border-color: #64ffda;
+            background: rgba(100, 255, 218, 0.05);
+        }
+
+        .error-message {
+            display: none;
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding-left: 0.25rem;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .submit-btn {
+            background: transparent;
+            color: #64ffda;
+            padding: 12px 30px;
+            border: 2px solid #64ffda;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #form-status {
+            font-size: 0.9rem;
+        }
+
+        #form-status.success {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+
+        #form-status.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a192f;
+            color: #8892b0;
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero .description {
+                font-size: 1rem;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                padding-left: 3rem;
+                padding-right: 0;
+            }
+
+            .timeline-dot {
+                left: 10px !important;
+            }
+
+            .timeline-content::before {
+                left: -30px !important;
+                border-right-color: white !important;
+                border-left-color: transparent !important;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #ccd6f6;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .language-switcher {
+                margin-left: 0;
+                gap: 0.3rem;
+            }
+
+            .lang-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="container">
+            <div class="logo">enginage</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#home" data-lang-ko="홈" data-lang-en="Home">홈</a></li>
+                    <li><a href="#about" data-lang-ko="소개" data-lang-en="About">소개</a></li>
+                    <li><a href="#experience" data-lang-ko="경험" data-lang-en="Experience">경험</a></li>
+                    <li><a href="#skills" data-lang-ko="기술" data-lang-en="Skills">기술</a></li>
+                    <li><a href="#value" data-lang-ko="가치" data-lang-en="Value">가치</a></li>
+                    <li><a href="#contact" data-lang-ko="연락" data-lang-en="Contact">연락</a></li>
+                </ul>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="ko">한국어</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>enginage</h1>
+                <div class="subtitle" data-lang-ko="회계, IFRS, 세무, HR, 급여시스템 아키텍트" data-lang-en="Accounting, IFRS, Tax, HR, Payroll System Architect">회계, IFRS, 세무, HR, 급여시스템 아키텍트</div>
+                <p class="description" data-lang-ko="17년 이상의 전문 경험으로 기업의 비즈니스 성과에 직접적인 기여를 하는 시스템 개발 전문가입니다." data-lang-en="A system development expert with over 17 years of professional experience, directly contributing to business performance.">17년 이상의 전문 경험으로 기업의 비즈니스 성과에 직접적인 기여를 하는 시스템 개발 전문가입니다.</p>
+                <a href="#contact" class="cta-button" data-lang-ko="프로젝트 문의하기" data-lang-en="Inquire About Project">프로젝트 문의하기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title" data-lang-ko="전문성과 업무 효율성" data-lang-en="Expertise and Work Efficiency">전문성과 업무 효율성</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3 data-lang-ko="17년 이상의 전문 경험" data-lang-en="Over 17 Years of Professional Experience">17년 이상의 전문 경험</h3>
+                    <p data-lang-ko="17년이 넘는 ERP, 회계, 세무, 인사 시스템 개발 경력을 통해 저는 기술적 전문성과 업무 효율성이 기업의 성과에 직접적인 영향을 미친다는 것을 확인했습니다. 전문가 한 명의 정확한 판단과 구현 능력이 기업의 시간과 비용을 크게 절감한다는 사실을 다양한 프로젝트를 통해 입증해왔습니다." data-lang-en="Through over 17 years of experience in ERP, accounting, tax, and HR system development, I have confirmed that technical expertise and work efficiency directly impact business performance. I have proven through various projects that one expert's accurate judgment and implementation capabilities significantly reduce a company's time and costs.">17년이 넘는 ERP, 회계, 세무, 인사 시스템 개발 경력을 통해 저는 기술적 전문성과 업무 효율성이 기업의 성과에 직접적인 영향을 미친다는 것을 확인했습니다. 전문가 한 명의 정확한 판단과 구현 능력이 기업의 시간과 비용을 크게 절감한다는 사실을 다양한 프로젝트를 통해 입증해왔습니다.</p>
+                    
+                    <div class="highlight-box">
+                        <h4 data-lang-ko="고난도 프로젝트 해결 능력" data-lang-en="High-Complexity Project Problem-Solving Ability">고난도 프로젝트 해결 능력</h4>
+                        <p data-lang-ko="23만 명의 급여 관리 시스템 프로젝트를 담당했을 때, 기존에 5년 이상 한 번도 국세청 신고를 완료하지 못했던 프로그램을 단독으로 진단하고 개선했습니다. 특히 세법이 크게 바뀐 해였음에도 불구하고, 제가 가진 회계, 세무, 인사, 급여에 대한 통합적 지식과 프로그래밍 능력을 활용하여 오류 없는 시스템을 구축하고 법정 기한 내에 신고를 완료했습니다." data-lang-en="When I was in charge of a payroll management system project for 230K+ employees, I independently diagnosed and improved a program that had failed to complete tax filing with the National Tax Service for over 5 years. Despite it being a year with major tax law changes, I utilized my integrated knowledge of accounting, tax, HR, and payroll along with programming skills to build an error-free system and complete the filing within the legal deadline.">23만 명의 급여 관리 시스템 프로젝트를 담당했을 때, 기존에 5년 이상 한 번도 국세청 신고를 완료하지 못했던 프로그램을 단독으로 진단하고 개선했습니다. 특히 세법이 크게 바뀐 해였음에도 불구하고, 제가 가진 회계, 세무, 인사, 급여에 대한 통합적 지식과 프로그래밍 능력을 활용하여 오류 없는 시스템을 구축하고 법정 기한 내에 신고를 완료했습니다.</p>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4 data-lang-ko="투자 대비 효과적인 가치 창출" data-lang-en="Cost-Effective Value Creation">투자 대비 효과적인 가치 창출</h4>
+                        <p data-lang-ko="다수 기업의 회계 시스템 구축 프로젝트에서 기존 시스템을 철저히 분석하여 독자적으로 설계와 구현을 완료했습니다. IFRS관리사, 재경관리사, 기업회계, 전산세무 자격증 등의 전문 지식으로 최소한의 투입으로 최대의 효과를 거두는 프로젝트 수행 방식을 지향합니다." data-lang-en="In accounting system construction projects for multiple companies, I thoroughly analyzed existing systems and independently completed design and implementation. With professional knowledge including IFRS Manager, Financial Management Specialist, Corporate Accounting, and Computerized Tax certifications, I aim for project execution methods that achieve maximum effect with minimum input.">다수 기업의 회계 시스템 구축 프로젝트에서 기존 시스템을 철저히 분석하여 독자적으로 설계와 구현을 완료했습니다. IFRS관리사, 재경관리사, 기업회계, 전산세무 자격증 등의 전문 지식으로 최소한의 투입으로 최대의 효과를 거두는 프로젝트 수행 방식을 지향합니다.</p>
+                    </div>
+
+                    <p data-lang-ko="이는 전문가 한 명의 깊은 도메인 지식과 기술 역량이 여러 명의 일반적인 인력보다 높은 효율성을 발휘할 수 있음을 보여주었습니다." data-lang-en="This demonstrated that one expert's deep domain knowledge and technical capabilities can achieve higher efficiency than multiple general personnel.">이는 전문가 한 명의 깊은 도메인 지식과 기술 역량이 여러 명의 일반적인 인력보다 높은 효율성을 발휘할 수 있음을 보여주었습니다.</p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">17+</span>
+                        <div class="stat-label" data-lang-ko="년 경력" data-lang-en="Years Experience">년 경력</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-lang-ko="23만명+" data-lang-en="230K+">23만명+</span>
+                        <div class="stat-label" data-lang-ko="급여 관리" data-lang-en="Payroll Managed">급여 관리</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <div class="stat-label" data-lang-ko="신고 완료율" data-lang-en="Filing Completion Rate">신고 완료율</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">8</span>
+                        <div class="stat-label" data-lang-ko="자격증" data-lang-en="Certifications">자격증</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title" data-lang-ko="주요 프로젝트 경험" data-lang-en="Key Project Experience">주요 프로젝트 경험</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title" data-lang-ko="연말정산 시스템" data-lang-en="Year-End Tax Settlement System">연말정산 시스템</div>
+                        <div class="timeline-company" data-lang-ko="연말정산 개발 프로젝트 (2014년-2025년)" data-lang-en="Year-End Tax Settlement Development Project (2014-2025)">연말정산 개발 프로젝트 (2014년-2025년)</div>
+                        <div class="timeline-description" data-lang-ko="10여년간 다수의 기업에서 연말정산 프로젝트 리더로 참여. 개정세법 분석 설계, 개발 및 시스템 개선 요구사항 반영. 신고 담당자보다 세법을 더 많이 아는 개발자로 문의 응대뿐 아니라 매년 아무 문제 없이 전산매체 정상제출을 통해 고객 만족도를 크게 향상시켰습니다." data-lang-en="Participated as a project leader for year-end tax settlement projects at multiple companies for over 10 years. Analyzed and designed revised tax laws, developed systems, and reflected improvement requirements. As a developer who knows tax law better than filing officers, I not only responded to inquiries but also significantly improved customer satisfaction by ensuring error-free electronic filing every year.">10여년간 다수의 기업에서 연말정산 프로젝트 리더로 참여. 개정세법 분석 설계, 개발 및 시스템 개선 요구사항 반영. 신고 담당자보다 세법을 더 많이 아는 개발자로 문의 응대뿐 아니라 매년 아무 문제 없이 전산매체 정상제출을 통해 고객 만족도를 크게 향상시켰습니다.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title" data-lang-ko="MIS 회계, 세무 프로그램" data-lang-en="MIS Accounting and Tax Program">MIS 회계, 세무 프로그램</div>
+                        <div class="timeline-company" data-lang-ko="회계 시스템 구축 프로젝트 (2018, 2019, 2023, 2024년)" data-lang-en="Accounting System Construction Project (2018, 2019, 2023, 2024)">회계 시스템 구축 프로젝트 (2018, 2019, 2023, 2024년)</div>
+                        <div class="timeline-description" data-lang-ko="JPA, 앵귤러, MS-SQL을 활용한 MIS 회계, 세무 프로그램 개발. 리스회계, 회계전표, 부가세 프로그램 설계, 개발을 통해 기존 시스템을 철저히 분석하여 독자적으로 설계와 구현을 완료했습니다." data-lang-en="Developed MIS accounting and tax programs using JPA, Angular, and MS-SQL. Through the design and development of lease accounting, accounting vouchers, and VAT programs, I thoroughly analyzed existing systems and independently completed design and implementation.">JPA, 앵귤러, MS-SQL을 활용한 MIS 회계, 세무 프로그램 개발. 리스회계, 회계전표, 부가세 프로그램 설계, 개발을 통해 기존 시스템을 철저히 분석하여 독자적으로 설계와 구현을 완료했습니다.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title" data-lang-ko="23만 명 급여 관리 시스템" data-lang-en="230K+ Employee Payroll Management System">23만 명 급여 관리 시스템</div>
+                        <div class="timeline-company" data-lang-ko="23만 명 급여 관리 프로젝트 (2015년)" data-lang-en="230K+ Employee Payroll Management Project (2015)">23만 명 급여 관리 프로젝트 (2015년)</div>
+                        <div class="timeline-description" data-lang-ko="5년 이상 한 번도 국세청 신고를 완료하지 못했던 프로그램을 단독으로 진단하고 개선. 개정세법 분석 설계 완료, 개발을 통해 23만명 연말정산 신고 완료(전산매체 신고 포함). 고객사 최초로 한번에 신고 완료." data-lang-en="Independently diagnosed and improved a program that had failed to complete National Tax Service filing for over 5 years. Completed revised tax law analysis and design, and through development, completed year-end tax settlement filing for 230K+ employees (including electronic filing). First-time successful filing completion for the client company.">5년 이상 한 번도 국세청 신고를 완료하지 못했던 프로그램을 단독으로 진단하고 개선. 개정세법 분석 설계 완료, 개발을 통해 23만명 연말정산 신고 완료(전산매체 신고 포함). 고객사 최초로 한번에 신고 완료.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title" data-lang-ko="더존비즈온 세무신고프로그램" data-lang-en="Duzon BizOn Tax Filing Program">더존비즈온 세무신고프로그램</div>
+                        <div class="timeline-company" data-lang-ko="세무신고프로그램 설계 및 개발 (2013년-2014년)" data-lang-en="Tax Filing Program Design and Development (2013-2014)">세무신고프로그램 설계 및 개발 (2013년-2014년)</div>
+                        <div class="timeline-description" data-lang-ko="원천세, 종소세, 법인세 개정분 설계 및 케이스별 종합 테스트. 연말정산 간소화서비스 PDF파일 업로드 기능 설계를 통해 고객들의 세무신고업무를 획기적으로 간소화했습니다." data-lang-en="Designed revised sections for withholding tax, comprehensive income tax, and corporate tax, and conducted comprehensive case-by-case testing. Designed PDF file upload functionality for year-end tax settlement simplification service, dramatically simplifying customers' tax filing work.">원천세, 종소세, 법인세 개정분 설계 및 케이스별 종합 테스트. 연말정산 간소화서비스 PDF파일 업로드 기능 설계를 통해 고객들의 세무신고업무를 획기적으로 간소화했습니다.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-title" data-lang-ko="ERP 컨설팅" data-lang-en="ERP Consulting">ERP 컨설팅</div>
+                        <div class="timeline-company" data-lang-ko="회계, 급여 도메인 리더 (2007년-2013년)" data-lang-en="Accounting and Payroll Domain Leader (2007-2013)">회계, 급여 도메인 리더 (2007년-2013년)</div>
+                        <div class="timeline-description" data-lang-ko="100곳 이상의 기업 담당자 상담(회계전반에 대한 이론, 세법, 결산업무). ERP도입 전의 회사시스템문제점을 확인하여 개선(특히, 원가부분)했습니다." data-lang-en="Consulted with managers from over 100 companies (theory of accounting, tax law, settlement work). Identified and improved company system issues before ERP implementation (especially cost aspects).">100곳 이상의 기업 담당자 상담(회계전반에 대한 이론, 세법, 결산업무). ERP도입 전의 회사시스템문제점을 확인하여 개선(특히, 원가부분)했습니다.</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title" data-lang-ko="기술 역량 및 자격증" data-lang-en="Technical Skills and Certifications">기술 역량 및 자격증</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 data-lang-ko="시스템 개발" data-lang-en="System Development">시스템 개발</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag" data-lang-ko="ERP 시스템" data-lang-en="ERP System">ERP 시스템</span>
+                        <span class="skill-tag" data-lang-ko="회계 시스템" data-lang-en="Accounting System">회계 시스템</span>
+                        <span class="skill-tag" data-lang-ko="세무 시스템" data-lang-en="Tax System">세무 시스템</span>
+                        <span class="skill-tag" data-lang-ko="인사 시스템" data-lang-en="HR System">인사 시스템</span>
+                        <span class="skill-tag" data-lang-ko="급여 관리" data-lang-en="Payroll Management">급여 관리</span>
+                        <span class="skill-tag" data-lang-ko="MIS 시스템" data-lang-en="MIS System">MIS 시스템</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-lang-ko="프로그래밍" data-lang-en="Programming">프로그래밍</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">C#</span>
+                        <span class="skill-tag">PL/SQL</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Angular</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Spring Framework</span>
+                        <span class="skill-tag">Spring Boot</span>
+                        <span class="skill-tag">JPA</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-lang-ko="데이터베이스" data-lang-en="Database">데이터베이스</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Oracle</span>
+                        <span class="skill-tag">MS-SQL</span>
+                        <span class="skill-tag">Maria DB</span>
+                        <span class="skill-tag">SQLite</span>
+                        <span class="skill-tag">Sybase</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 data-lang-ko="자격증" data-lang-en="Certifications">자격증</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag certification-tag" data-lang-ko="IFRS관리사" data-lang-en="IFRS Manager">IFRS관리사</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="재경관리사" data-lang-en="Financial Management Specialist">재경관리사</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="기업회계2급" data-lang-en="Corporate Accounting Level 2">기업회계2급</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="전산세무2급" data-lang-en="Computerized Tax Level 2">전산세무2급</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="ERP정보관리사" data-lang-en="ERP Information Manager">ERP정보관리사</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="정보처리기사" data-lang-en="Information Processing Engineer">정보처리기사</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="컴퓨터활용능력1급" data-lang-en="Computer Literacy Level 1">컴퓨터활용능력1급</span>
+                        <span class="skill-tag certification-tag" data-lang-ko="워드프로세서1급" data-lang-en="Word Processor Level 1">워드프로세서1급</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section id="value" class="value-proposition">
+        <div class="container">
+            <h2 class="section-title" data-lang-ko="제가 제공하는 가치" data-lang-en="Value I Provide">제가 제공하는 가치</h2>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-icon">💰</div>
+                    <h3 data-lang-ko="비용 효율적인 문제 해결" data-lang-en="Cost-Effective Problem Solving">비용 효율적인 문제 해결</h3>
+                    <p data-lang-ko="전문성을 통해 복잡한 문제를 효율적으로 해결함으로써 총비용 절감" data-lang-en="Reduce total costs by efficiently solving complex problems through expertise">전문성을 통해 복잡한 문제를 효율적으로 해결함으로써 총비용 절감</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🛡️</div>
+                    <h3 data-lang-ko="리스크 관리" data-lang-en="Risk Management">리스크 관리</h3>
+                    <p data-lang-ko="회계, 세무 분야의 깊은 이해를 바탕으로 법적 리스크 최소화" data-lang-en="Minimize legal risks based on deep understanding of accounting and tax fields">회계, 세무 분야의 깊은 이해를 바탕으로 법적 리스크 최소화</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🏗️</div>
+                    <h3 data-lang-ko="지속가능한 시스템 구축" data-lang-en="Sustainable System Construction">지속가능한 시스템 구축</h3>
+                    <p data-lang-ko="단기적 해결책이 아닌, 장기적으로 안정적인 시스템 구축" data-lang-en="Build stable systems for the long term, not short-term solutions">단기적 해결책이 아닌, 장기적으로 안정적인 시스템 구축</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h3 data-lang-ko="혁신적인 접근" data-lang-en="Innovative Approach">혁신적인 접근</h3>
+                    <p data-lang-ko="기존 방식을 뛰어넘는 창의적인 솔루션 제공" data-lang-en="Provide creative solutions that go beyond existing methods">기존 방식을 뛰어넘는 창의적인 솔루션 제공</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title" data-lang-ko="프로젝트 문의" data-lang-en="Project Inquiry">프로젝트 문의</h2>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name" data-lang-ko="이름" data-lang-en="Name">이름</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-lang-ko="이메일" data-lang-en="Email">이메일</label>
+                            <input type="email" id="email" name="email" required>
+                            <div class="error-message" id="email-error" data-lang-ko="올바른 이메일 주소를 입력해주세요." data-lang-en="Please enter a valid email address."></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" data-lang-ko="회사명" data-lang-en="Company">회사명</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-lang-ko="메시지" data-lang-en="Message">메시지</label>
+                            <textarea id="message" name="message" rows="5" required data-placeholder-ko="어떤 프로젝트에 관심이 있으신지 알려주세요." data-placeholder-en="Please let us know what project you are interested in." placeholder="어떤 프로젝트에 관심이 있으신지 알려주세요."></textarea>
+                        </div>
+                        <div id="form-status" style="display: none; margin-bottom: 1rem; padding: 0.75rem; border-radius: 8px; text-align: center;"></div>
+                        <button type="submit" class="submit-btn" id="submit-btn" data-lang-ko="문의하기" data-lang-en="Submit Inquiry">문의하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 enginage. <span data-lang-ko="모든 권리 보유." data-lang-en="All rights reserved.">모든 권리 보유.</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Language Switcher
+        let currentLang = localStorage.getItem('language') || 'ko';
+        
+        const translations = {
+            ko: {
+                formSuccess: '문의가 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.',
+                formError: '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+                sending: '전송 중...'
+            },
+            en: {
+                formSuccess: 'Your inquiry has been received. We will contact you soon.',
+                formError: 'An error occurred while sending. Please try again later.',
+                sending: 'Sending...'
+            }
+        };
+
+        // EmailJS 초기화
+        // 설정 방법: EMAILJS_SETUP.md 파일 참고
+        // 1. https://www.emailjs.com/ 에서 계정 생성
+        // 2. Email Service 추가 (Gmail, Outlook 등)
+        // 3. Email Template 생성 (받을 이메일 주소는 템플릿에서 설정)
+        // 4. 아래 값들을 EmailJS 대시보드에서 가져와서 입력
+        const EMAILJS_SERVICE_ID = 'service_h77lgzl'; // EmailJS 서비스 ID (예: service_abc123)
+        const EMAILJS_TEMPLATE_ID = 'template_ge1lock'; // EmailJS 템플릿 ID (예: template_xyz789)
+        const EMAILJS_PUBLIC_KEY = 'X-JX2UvdfOYy-mI9T'; // EmailJS Public Key (Account > General에서 확인)
+
+        // EmailJS 초기화
+        (function(){
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        })();
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Update all elements with data-lang-ko and data-lang-en
+            document.querySelectorAll('[data-lang-ko], [data-lang-en]').forEach(element => {
+                const koText = element.getAttribute('data-lang-ko');
+                const enText = element.getAttribute('data-lang-en');
+                if (lang === 'ko' && koText) {
+                    element.textContent = koText;
+                } else if (lang === 'en' && enText) {
+                    element.textContent = enText;
+                }
+            });
+            
+            // Update placeholder attributes
+            document.querySelectorAll('[data-placeholder-ko], [data-placeholder-en]').forEach(element => {
+                const koPlaceholder = element.getAttribute('data-placeholder-ko');
+                const enPlaceholder = element.getAttribute('data-placeholder-en');
+                if (lang === 'ko' && koPlaceholder) {
+                    element.placeholder = koPlaceholder;
+                } else if (lang === 'en' && enPlaceholder) {
+                    element.placeholder = enPlaceholder;
+                }
+            });
+            
+            // Update error messages
+            document.querySelectorAll('.error-message[data-lang-ko], .error-message[data-lang-en]').forEach(element => {
+                if (element.classList.contains('show')) {
+                    const koMessage = element.getAttribute('data-lang-ko');
+                    const enMessage = element.getAttribute('data-lang-en');
+                    if (lang === 'ko' && koMessage) {
+                        element.textContent = koMessage;
+                    } else if (lang === 'en' && enMessage) {
+                        element.textContent = enMessage;
+                    }
+                }
+            });
+            
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize language on page load
+        updateLanguage(currentLang);
+
+        // Language button click handlers
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                updateLanguage(lang);
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Email validation function
+        function validateEmail(email) {
+            // RFC 5322 compliant email regex (simplified version)
+            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            return emailRegex.test(email);
+        }
+
+        // Email validation with visual feedback
+        function validateEmailField(emailInput, errorElement) {
+            const email = emailInput.value.trim();
+            const formGroup = emailInput.closest('.form-group');
+            
+            if (email === '') {
+                // Empty field - remove validation classes
+                emailInput.classList.remove('error', 'valid');
+                errorElement.classList.remove('show');
+                return false;
+            }
+            
+            if (validateEmail(email)) {
+                // Valid email
+                emailInput.classList.remove('error');
+                emailInput.classList.add('valid');
+                errorElement.classList.remove('show');
+                return true;
+            } else {
+                // Invalid email
+                emailInput.classList.remove('valid');
+                emailInput.classList.add('error');
+                errorElement.classList.add('show');
+                
+                // Update error message based on current language
+                const koMessage = errorElement.getAttribute('data-lang-ko');
+                const enMessage = errorElement.getAttribute('data-lang-en');
+                errorElement.textContent = currentLang === 'ko' ? koMessage : enMessage;
+                
+                return false;
+            }
+        }
+
+        // Form submission with EmailJS
+        const contactForm = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formStatus = document.getElementById('form-status');
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('email-error');
+
+        function showStatus(message, isSuccess) {
+            formStatus.style.display = 'block';
+            formStatus.textContent = message;
+            formStatus.className = isSuccess ? 'success' : 'error';
+            
+            if (isSuccess) {
+                setTimeout(() => {
+                    formStatus.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Real-time email validation
+        emailInput.addEventListener('input', function() {
+            validateEmailField(emailInput, emailError);
+        });
+
+        emailInput.addEventListener('blur', function() {
+            validateEmailField(emailInput, emailError);
+        });
+
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate email before submission
+            if (!validateEmailField(emailInput, emailError)) {
+                // Scroll to email field if invalid
+                emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                emailInput.focus();
+                return;
+            }
+            
+            // 버튼 비활성화 및 로딩 상태
+            submitBtn.disabled = true;
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = translations[currentLang].sending;
+            formStatus.style.display = 'none';
+
+            try {
+                // 폼 데이터 수집
+                const formData = {
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    company: document.getElementById('company').value.trim() || 'N/A',
+                    message: document.getElementById('message').value.trim()
+                };
+
+                // EmailJS로 이메일 전송
+                await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    {
+                        from_name: formData.name,
+                        from_email: formData.email,
+                        company: formData.company,
+                        message: formData.message,
+                        to_email: 'your-email@example.com' // 이 값은 EmailJS 템플릿에서 설정 가능
+                    }
+                );
+
+                // 성공 메시지
+                showStatus(translations[currentLang].formSuccess, true);
+                contactForm.reset();
+                
+            } catch (error) {
+                console.error('EmailJS Error:', error);
+                showStatus(translations[currentLang].formError, false);
+            } finally {
+                // 버튼 활성화 및 원래 텍스트 복원
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            }
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 25, 47, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.4)';
+            } else {
+                header.style.background = 'rgba(10, 25, 47, 0.85)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
+            }
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for fade-in animation
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-links').style.display = 'none';
+                }
+            });
+        });
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect when page loads
+        window.addEventListener('load', function() {
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.textContent;
+            typeWriter(heroTitle, originalText, 150);
+        });
+    </script>
+</body>
+</html>
